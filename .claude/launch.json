@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "segmentiq",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/Users/rachidaitaissa/Desktop/segmentiq/server.js"],
+      "port": 3030
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SegmentIQ — Customer Segmentation Platform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Segment<span>IQ</span></div>
+    <div class="nav-links" id="navLinks">
+      <a onclick="navigate('home')" data-page="home">Produit</a>
+      <a onclick="navigate('segments-public')" data-page="segments-public">Segments</a>
+      <a onclick="navigate('dashboard')" data-page="dashboard">Dashboard</a>
+      <a onclick="navigate('predict')" data-page="predict">Prediction</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user" id="navUser"></span>
+      <button class="btn btn-primary btn-sm" id="navLoginBtn" onclick="navigate('login')">Connexion</button>
+      <button class="btn btn-outline btn-sm" id="navLogoutBtn" onclick="logout()" style="display:none">Deconnexion</button>
+    </div>
+  </nav>
+
+  <!-- ══════ PAGE: HOME ══════ -->
+  <div id="page-home" class="page active">
+    <!-- decorative background grid -->
+    <div class="hero-bg" aria-hidden="true">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+      </svg>
+    </div>
+
+    <div class="hero">
+      <div class="badge">Fuzzy C-Means · Segmentation Client</div>
+      <h1>Segmentez vos clients.<br><em>Decidez precisement.</em></h1>
+      <p>SegmentIQ transforme les donnees clients brutes en segments actionnables grace a l'intelligence du clustering Fuzzy C-Means. Une plateforme complete, pensee pour les decideurs.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="navigate('predict')">Lancer une prediction</button>
+        <button class="btn btn-outline" onclick="navigate('dashboard')">Voir le Dashboard</button>
+      </div>
+
+      <!-- Hero visual -->
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;margin-top:48px;">
+          <!-- axes -->
+          <line x1="60" y1="220" x2="520" y2="220" stroke="#cbd5e1" stroke-width="1.5"/>
+          <line x1="60" y1="20" x2="60" y2="220" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="290" y="248" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="system-ui">Revenu Annuel (k$)</text>
+          <text x="20" y="120" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="system-ui" transform="rotate(-90,20,120)">Spending Score</text>
+          <!-- cluster 1: high income high spending -->
+          <circle cx="420" cy="55"  r="7" fill="#1d4ed8" opacity=".85"/>
+          <circle cx="445" cy="45"  r="6" fill="#1d4ed8" opacity=".75"/>
+          <circle cx="400" cy="70"  r="5" fill="#1d4ed8" opacity=".8"/>
+          <circle cx="460" cy="60"  r="6" fill="#1d4ed8" opacity=".7"/>
+          <circle cx="435" cy="40"  r="5" fill="#1d4ed8" opacity=".9"/>
+          <circle cx="480" cy="50"  r="6" fill="#1d4ed8" opacity=".75"/>
+          <circle cx="415" cy="80"  r="5" fill="#1d4ed8" opacity=".8"/>
+          <!-- cluster 2: high income low spending -->
+          <circle cx="430" cy="185" r="7" fill="#0891b2" opacity=".85"/>
+          <circle cx="460" cy="195" r="6" fill="#0891b2" opacity=".75"/>
+          <circle cx="410" cy="175" r="5" fill="#0891b2" opacity=".8"/>
+          <circle cx="450" cy="205" r="6" fill="#0891b2" opacity=".7"/>
+          <circle cx="480" cy="180" r="5" fill="#0891b2" opacity=".85"/>
+          <!-- cluster 3: low income high spending -->
+          <circle cx="100" cy="60"  r="7" fill="#7c3aed" opacity=".85"/>
+          <circle cx="120" cy="45"  r="6" fill="#7c3aed" opacity=".75"/>
+          <circle cx="90"  cy="75"  r="5" fill="#7c3aed" opacity=".8"/>
+          <circle cx="140" cy="55"  r="6" fill="#7c3aed" opacity=".7"/>
+          <circle cx="110" cy="40"  r="5" fill="#7c3aed" opacity=".9"/>
+          <!-- cluster 4: low income low spending -->
+          <circle cx="100" cy="185" r="7" fill="#94a3b8" opacity=".85"/>
+          <circle cx="120" cy="200" r="6" fill="#94a3b8" opacity=".75"/>
+          <circle cx="90"  cy="170" r="5" fill="#94a3b8" opacity=".8"/>
+          <circle cx="140" cy="195" r="6" fill="#94a3b8" opacity=".7"/>
+          <circle cx="110" cy="210" r="5" fill="#94a3b8" opacity=".85"/>
+          <!-- cluster 5: average -->
+          <circle cx="265" cy="115" r="7" fill="#059669" opacity=".85"/>
+          <circle cx="285" cy="130" r="6" fill="#059669" opacity=".75"/>
+          <circle cx="245" cy="125" r="5" fill="#059669" opacity=".8"/>
+          <circle cx="300" cy="110" r="6" fill="#059669" opacity=".7"/>
+          <circle cx="260" cy="140" r="5" fill="#059669" opacity=".9"/>
+          <circle cx="280" cy="100" r="6" fill="#059669" opacity=".75"/>
+          <circle cx="240" cy="105" r="5" fill="#059669" opacity=".8"/>
+          <circle cx="310" cy="130" r="5" fill="#059669" opacity=".7"/>
+          <!-- cluster centers -->
+          <path d="M437,48 L443,54 M443,48 L437,54" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M447,192 L453,198 M453,192 L447,198" stroke="#0891b2" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M110,55 L116,61 M116,55 L110,61" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M110,192 L116,198 M116,192 L110,198" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M272,118 L278,124 M278,118 L272,124" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- legend -->
+          <circle cx="75"  cy="14" r="5" fill="#1d4ed8"/><text x="83"  y="18" font-size="9.5" fill="#475569" font-family="system-ui">Hi-Inc / Hi-Sp</text>
+          <circle cx="175" cy="14" r="5" fill="#0891b2"/><text x="183" y="18" font-size="9.5" fill="#475569" font-family="system-ui">Hi-Inc / Lo-Sp</text>
+          <circle cx="280" cy="14" r="5" fill="#7c3aed"/><text x="288" y="18" font-size="9.5" fill="#475569" font-family="system-ui">Lo-Inc / Hi-Sp</text>
+          <circle cx="380" cy="14" r="5" fill="#94a3b8"/><text x="388" y="18" font-size="9.5" fill="#475569" font-family="system-ui">Lo-Inc / Lo-Sp</text>
+          <circle cx="465" cy="14" r="5" fill="#059669"/><text x="473" y="18" font-size="9.5" fill="#475569" font-family="system-ui">Average</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-bar" id="homeStats">
+      <div class="stat-item"><div class="stat-number" id="statCustomers">—</div><div class="stat-label">Clients analyses</div></div>
+      <div class="stat-item"><div class="stat-number" id="statFPC">—</div><div class="stat-label">Confiance FPC</div></div>
+      <div class="stat-item"><div class="stat-number" id="statSilhouette">—</div><div class="stat-label">Silhouette Score</div></div>
+      <div class="stat-item"><div class="stat-number">5</div><div class="stat-label">Segments identifies</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Architecture produit</div>
+      <div class="section-title">Trois espaces. Un seul outil.</div>
+      <div class="section-sub">SegmentIQ est structure autour de modules complementaires accessibles depuis une interface unifiee.</div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">D</div>
+          <h3>Dashboard Global</h3>
+          <p>Vue d'ensemble en temps reel : repartition des segments, metriques de qualite du modele FPC, Silhouette et Davies-Bouldin.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">P</div>
+          <h3>Moteur de Prediction</h3>
+          <p>Saisie manuelle d'un client. Le modele Fuzzy C-Means calcule les degres d'appartenance et attribue un segment avec recommandation.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">C</div>
+          <h3>Base Clients</h3>
+          <p>Historique de toutes les predictions effectuees. Filtres par segment, visualisation du profil complet de chaque client analyse.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">S</div>
+          <h3>Profils de Segments</h3>
+          <p>Description detaillee des 5 segments identifies, centres de clusters et recommandations marketing associees.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">F</div>
+          <h3>Membership Fuzzy</h3>
+          <p>Chaque prediction expose les 5 degres d'appartenance. Un client peut appartenir partiellement a plusieurs segments.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">A</div>
+          <h3>Espace Admin Securise</h3>
+          <p>Authentification requise pour acceder aux modules d'analyse. Gestion des clients analyses et suppression des entrees.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="section" style="padding-top: 48px; padding-bottom: 48px;">
+      <div class="section-label">Stack technique</div>
+      <div class="section-title">Technologie retenue</div>
+      <div class="cards-grid" style="margin-top: 28px;">
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">Vanilla JS</h3>
+          <p>Frontend SPA — routing, appels API fetch, rendu dynamique sans framework.</p>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">Node.js / Express</h3>
+          <p>API REST — endpoints prediction, CRUD clients, authentification.</p>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">Python / scikit-fuzzy</h3>
+          <p>Moteur FCM — inference a la demande, centres pre-calcules sur Mall Customers.</p>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">SQLite</h3>
+          <p>Base de donnees embarquee — clients, historique predictions, utilisateurs.</p>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">scikit-learn</h3>
+          <p>StandardScaler pour la normalisation, Silhouette et Davies-Bouldin pour la validation.</p>
+        </div>
+        <div class="card" style="padding: 18px 22px;">
+          <h3 style="margin-bottom: 5px;">Mall Customers Dataset</h3>
+          <p>200 clients, 5 colonnes. Dataset de reference pour l'entrainement du modele FCM.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-logo">Segment<span>IQ</span></div>
+      <div>Projet universitaire — Fuzzy C-Means Customer Segmentation</div>
+      <div>Vanilla JS + SQLite + Python</div>
+    </footer>
+  </div>
+
+  <!-- ══════ PAGE: LOGIN ══════ -->
+  <div id="page-login" class="page">
+    <div class="login-wrap">
+      <div class="login-box">
+        <div class="login-title">Connexion Admin</div>
+        <div class="login-sub">Acces reserve aux administrateurs de la plateforme.</div>
+        <div class="login-error" id="loginError"></div>
+        <form onsubmit="doLogin(event)">
+          <div class="field">
+            <label>Nom d'utilisateur</label>
+            <input type="text" id="loginUsername" placeholder="admin" autocomplete="username">
+          </div>
+          <div class="field">
+            <label>Mot de passe</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">Se connecter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ ADMIN WRAPPER ══════ -->
+  <div id="page-dashboard" class="page">
+    <div class="admin-layout">
+      <aside class="sidebar">
+        <div class="sidebar-label">Navigation</div>
+        <div class="sidebar-link active" onclick="showAdminSection('dashboard')" data-section="dashboard"><div class="sidebar-dot"></div> Dashboard</div>
+        <div class="sidebar-link" onclick="showAdminSection('predict')" data-section="predict"><div class="sidebar-dot"></div> Prediction</div>
+        <div class="sidebar-link" onclick="showAdminSection('clients')" data-section="clients"><div class="sidebar-dot"></div> Clients</div>
+        <div class="sidebar-link" onclick="showAdminSection('segments')" data-section="segments"><div class="sidebar-dot"></div> Segments</div>
+        <div class="sidebar-link" onclick="showAdminSection('modele')" data-section="modele"><div class="sidebar-dot"></div> Modèle</div>
+      </aside>
+      <main class="main-content">
+
+        <!-- DASHBOARD SECTION -->
+        <div id="section-dashboard" class="admin-section">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Dashboard</div>
+              <div class="page-sub">Vue globale du modele et des segments clients.</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadDashboard()">Actualiser</button>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Clients dataset</div>
+              <div class="kpi-value" id="dbCustomers">—</div>
+              <div class="kpi-sub">Mall Customers CSV</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">FPC (Fuzzy Partition Coeff.)</div>
+              <div class="kpi-value" id="dbFPC">—</div>
+              <div class="kpi-sub">Plus proche de 1 = meilleur</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Silhouette Score</div>
+              <div class="kpi-value" id="dbSilhouette">—</div>
+              <div class="kpi-sub">Separation des clusters</div>
+            </div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">Repartition des clients par segment</div>
+            <div class="bar-chart" id="dbBarChart">
+              <div class="loading"><div class="spinner"></div> Chargement du modele...</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px;">
+            <div class="kpi-card" style="display:inline-flex; gap:32px; padding:16px 24px;">
+              <div><div class="kpi-label">Davies-Bouldin Index</div><div class="kpi-value" id="dbDBI" style="font-size:20px;">—</div></div>
+              <div><div class="kpi-label">Nombre de clusters</div><div class="kpi-value" style="font-size:20px;">5</div></div>
+              <div><div class="kpi-label">Predictions effectuees</div><div class="kpi-value" id="dbPredictions" style="font-size:20px;">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PREDICT SECTION -->
+        <div id="section-predict" class="admin-section" style="display:none">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Prediction</div>
+              <div class="page-sub">Segmentez un client via le modele Fuzzy C-Means.</div>
+            </div>
+          </div>
+          <div class="predict-grid">
+            <div class="form-box">
+              <h3>Nouveau client</h3>
+              <div class="form-row">
+                <div class="field">
+                  <label>Genre</label>
+                  <select id="pGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Age</label>
+                  <input type="number" id="pAge" placeholder="ex. 32" min="18" max="100">
+                </div>
+              </div>
+              <div class="field">
+                <label>Revenu annuel (k$)</label>
+                <input type="number" id="pIncome" placeholder="ex. 75" min="1" max="200" step="0.5">
+                <div class="field-hint">Valeur en milliers de dollars. Ex : 75 = 75 000 $</div>
+              </div>
+              <div class="field">
+                <label>Spending Score (1 — 100)</label>
+                <input type="number" id="pSpending" placeholder="ex. 72" min="1" max="100">
+                <div class="field-hint">Score d'intensite de depense attribue par le mall.</div>
+              </div>
+              <div id="predictAlert"></div>
+              <button class="btn btn-blue" style="width:100%; margin-top:8px;" onclick="doPredict()">Analyser ce client</button>
+              <div style="margin-top:10px; font-size:12px; color:#aaa; text-align:center;">Tester rapidement :</div>
+              <div style="display:flex; gap:8px; margin-top:6px; flex-wrap:wrap;">
+                <button class="btn btn-outline btn-sm" onclick="fillExample(85, 76)">Revenu eleve / Depense elevee</button>
+                <button class="btn btn-outline btn-sm" onclick="fillExample(80, 18)">Revenu eleve / Depense faible</button>
+                <button class="btn btn-outline btn-sm" onclick="fillExample(25, 79)">Revenu faible / Depense elevee</button>
+                <button class="btn btn-outline btn-sm" onclick="fillExample(22, 20)">Revenu faible / Depense faible</button>
+                <button class="btn btn-outline btn-sm" onclick="fillExample(55, 50)">Client moyen</button>
+              </div>
+            </div>
+            <div class="result-box">
+              <h3>Resultat</h3>
+              <div id="predictResult">
+                <div class="result-empty">Renseignez les caracteristiques du client et lancez l'analyse.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIENTS SECTION -->
+        <div id="section-clients" class="admin-section" style="display:none">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Clients analyses</div>
+              <div class="page-sub">Historique de toutes les predictions effectuees.</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadClients()">Actualiser</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Genre</th>
+                  <th>Age</th>
+                  <th>Revenu (k$)</th>
+                  <th>Spending Score</th>
+                  <th>Segment</th>
+                  <th>Confiance</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="clientsTable">
+                <tr><td colspan="9" style="text-align:center; padding:32px; color:#aaa;">Chargement...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- MODELE SECTION -->
+        <div id="section-modele" class="admin-section" style="display:none">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Notebook — Analyse complète</div>
+              <div class="page-sub">EDA, Feature Engineering, Modélisation FCM, Résultats et Interprétation.</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadModele()">Actualiser</button>
+          </div>
+
+          <!-- TABS -->
+          <div class="model-tabs">
+            <button class="model-tab active" onclick="switchTab('eda')">EDA</button>
+            <button class="model-tab" onclick="switchTab('features')">Feature Engineering</button>
+            <button class="model-tab" onclick="switchTab('choix-k')">Choix de k</button>
+            <button class="model-tab" onclick="switchTab('clustering')">Clustering FCM</button>
+            <button class="model-tab" onclick="switchTab('resultats')">Résultats</button>
+          </div>
+
+          <!-- EDA TAB -->
+          <div id="tab-eda" class="tab-content active">
+            <div class="model-block">
+              <div class="model-block-title">Aperçu du Dataset</div>
+              <div class="model-block-sub">Mall Customers — 200 clients, 5 colonnes, 0 valeur manquante, 0 doublon.</div>
+              <div class="overview-grid" id="overviewGrid"></div>
+            </div>
+
+            <div class="model-block">
+              <div class="model-block-title">Statistiques Descriptives</div>
+              <div class="model-block-sub">Résumé des variables numériques : Age, Revenu Annuel et Spending Score.</div>
+              <div id="statsTable"></div>
+            </div>
+
+            <div class="model-block">
+              <div class="model-block-title">Distribution par Genre</div>
+              <div class="model-block-sub">Répartition hommes / femmes dans le dataset.</div>
+              <div style="display:flex; gap:24px; align-items:center; margin-top:16px;">
+                <canvas id="genderChart" width="160" height="160"></canvas>
+                <div id="genderLegend"></div>
+              </div>
+            </div>
+
+            <div class="model-block">
+              <div class="model-block-title">Distributions des Variables</div>
+              <div class="model-block-sub">Histogrammes avec courbe de densité pour Age, Revenu Annuel et Spending Score.</div>
+              <div class="canvas-row">
+                <div class="canvas-wrap"><canvas id="histAge" width="300" height="180"></canvas><div class="canvas-label">Age</div></div>
+                <div class="canvas-wrap"><canvas id="histIncome" width="300" height="180"></canvas><div class="canvas-label">Revenu Annuel (k$)</div></div>
+                <div class="canvas-wrap"><canvas id="histSpending" width="300" height="180"></canvas><div class="canvas-label">Spending Score</div></div>
+              </div>
+            </div>
+
+            <div class="model-block">
+              <div class="model-block-title">Matrice de Corrélation</div>
+              <div class="model-block-sub">Corrélation entre les variables numériques — base pour le choix des features de clustering.</div>
+              <canvas id="heatmap" width="340" height="280" style="margin-top:16px;"></canvas>
+            </div>
+
+            <div class="model-block">
+              <div class="model-block-title">Scatter — Revenu vs Spending Score</div>
+              <div class="model-block-sub">Visualisation avant clustering — les groupes naturels sont déjà visibles dans cet espace.</div>
+              <canvas id="scatterEDA" width="520" height="340" style="margin-top:16px;"></canvas>
+            </div>
+          </div>
+
+          <!-- FEATURES TAB -->
+          <div id="tab-features" class="tab-content">
+            <div class="model-block">
+              <div class="model-block-title">Variables Créées pour l'Interprétation</div>
+              <div class="model-block-sub">Ces variables ne sont pas utilisées comme inputs du modèle. Elles servent uniquement à enrichir l'interprétation des clusters.</div>
+              <div class="feature-cards" id="featureCards"></div>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Répartition par Tranche d'Âge</div>
+              <div class="model-block-sub">Distribution des clients selon les tranches d'âge générées par pd.cut().</div>
+              <canvas id="ageGroupChart" width="480" height="220" style="margin-top:16px;"></canvas>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Pipeline de Preprocessing</div>
+              <div class="model-block-sub">Étapes appliquées avant l'entraînement du modèle Fuzzy C-Means.</div>
+              <div class="pipeline" id="pipeline"></div>
+            </div>
+          </div>
+
+          <!-- CHOIX K TAB -->
+          <div id="tab-choix-k" class="tab-content">
+            <div class="model-block">
+              <div class="model-block-title">Comparaison des Métriques pour k = 2 à 7</div>
+              <div class="model-block-sub">Trois métriques évaluées simultanément : FPC (plus proche de 1 = meilleur), Silhouette Score (plus proche de 1 = meilleur), Davies-Bouldin Index (plus bas = meilleur).</div>
+              <div class="canvas-row">
+                <div class="canvas-wrap"><canvas id="kFPC" width="300" height="200"></canvas><div class="canvas-label">FPC par k</div></div>
+                <div class="canvas-wrap"><canvas id="kSil" width="300" height="200"></canvas><div class="canvas-label">Silhouette par k</div></div>
+                <div class="canvas-wrap"><canvas id="kDBI" width="300" height="200"></canvas><div class="canvas-label">Davies-Bouldin par k</div></div>
+              </div>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Tableau Comparatif</div>
+              <div id="kMetricsTable"></div>
+            </div>
+            <div class="model-block" style="background:var(--blue-light); border-color:var(--blue-border);">
+              <div class="model-block-title" style="color:var(--blue);">Décision : k = 5 retenu</div>
+              <div class="model-block-sub">k=5 est choisi par combinaison des métriques et de l'interprétabilité business : les 5 segments correspondent à des profils marketing distincts et actionnables (High/Low Income × High/Low Spending + Average).</div>
+            </div>
+          </div>
+
+          <!-- CLUSTERING TAB -->
+          <div id="tab-clustering" class="tab-content">
+            <div class="model-block">
+              <div class="model-block-title">Algorithme Fuzzy C-Means</div>
+              <div class="model-block-sub">Contrairement au k-means classique, le FCM attribue à chaque point un degré d'appartenance (entre 0 et 1) pour chaque cluster. La somme des degrés est toujours égale à 1.</div>
+              <div class="algo-steps" id="algoSteps"></div>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Visualisation Finale — Clusters FCM (k=5)</div>
+              <div class="model-block-sub">Chaque point est coloré selon son segment d'appartenance dominant. Les croix représentent les centres de clusters.</div>
+              <canvas id="scatterFCM" width="560" height="380" style="margin-top:16px;"></canvas>
+              <div id="scatterLegend" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:10px;"></div>
+            </div>
+          </div>
+
+          <!-- RESULTATS TAB -->
+          <div id="tab-resultats" class="tab-content">
+            <div class="model-block">
+              <div class="model-block-title">Profils des Clusters</div>
+              <div class="model-block-sub">Caractéristiques moyennes de chaque segment identifié par le modèle FCM.</div>
+              <div id="profilesTable"></div>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Répartition des Clients par Segment</div>
+              <canvas id="segDistChart" width="520" height="220" style="margin-top:16px;"></canvas>
+            </div>
+            <div class="model-block">
+              <div class="model-block-title">Recommandations Marketing</div>
+              <div id="recoCards"></div>
+            </div>
+            <div class="model-block" style="background:#f0fdf4; border-color:#bbf7d0;">
+              <div class="model-block-title" style="color:#166534;">Conclusion</div>
+              <div class="model-block-sub">Le modèle Fuzzy C-Means avec k=5 segmente efficacement les clients du mall sur la base du revenu annuel et du spending score. Le FPC de 0.67 et le Silhouette de 0.55 confirment une bonne séparation des clusters. La nature floue du FCM permet de capturer les profils ambigus — les clients à la frontière de deux segments reçoivent des degrés d'appartenance partiels qui enrichissent l'analyse.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEGMENTS SECTION -->
+        <div id="section-segments" class="admin-section" style="display:none">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Profils de Segments</div>
+              <div class="page-sub">Description des 5 segments identifies par le modele FCM.</div>
+            </div>
+          </div>
+          <div class="segments-grid" id="segmentsGrid">
+            <div class="loading"><div class="spinner"></div> Chargement...</div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ══════ PAGE: SEGMENTS PUBLIC ══════ -->
+  <div id="page-segments-public" class="page">
+    <div class="section">
+      <div class="section-label">Modele Fuzzy C-Means</div>
+      <div class="section-title">Les 5 segments clients</div>
+      <div class="section-sub">Chaque segment est identifie sur la base du revenu annuel et du score de depense. Le clustering fuzzy attribue un degre d'appartenance partiel a chaque client.</div>
+      <div class="segments-grid" id="segmentsGridPublic" style="margin-top: 32px;">
+        <div class="loading"><div class="spinner"></div> Chargement...</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .app -->
+
+<script src="/js/charts.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
